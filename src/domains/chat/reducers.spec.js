@@ -1,13 +1,13 @@
 import reducers from './reducers';
 
-describe('UI reducers', () => {
+describe('Games reducers', () => {
   let state;
   let action;
   let result;
 
   context('when the state is empty', () => {
     beforeEach(() => {
-      state = {};
+      state = { allGames: [] };
     });
 
     context('and no action is triggered', () => {

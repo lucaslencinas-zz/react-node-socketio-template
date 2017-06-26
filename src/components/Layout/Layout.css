@@ -1,0 +1,16 @@
+:local {
+  .layout {
+    display: flex;
+    min-height: 100%;
+    padding-top: 20px;
+
+    .alert {
+      .alert-message {}
+      .alert-close {}
+    }
+
+    .content {
+      flex: 1;
+    }
+  }
+}

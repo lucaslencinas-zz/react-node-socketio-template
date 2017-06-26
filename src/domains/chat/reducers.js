@@ -1,22 +1,18 @@
-
 import actionTypes from './actionTypes';
 
-const initialState = {};
+const initialState = {
+  username: 'defaultusername',
+  members: [],
+  messages: []
+};
 
 export default function reducers(state = initialState, action) {
   switch (action.type) {
-    case actionTypes.SET_ALERT:
+    case actionTypes.SET_USER_NAME:
       return {
         ...state,
-        alert: action.alert
+        username: action.username
       };
-
-    case actionTypes.CLOSE_ALERT:
-      return {
-        ...state,
-        alert: null
-      };
-
     default:
       return state;
   }
