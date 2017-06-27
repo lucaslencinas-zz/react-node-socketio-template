@@ -21,6 +21,7 @@
       display: flex;
 
       .input-name {
+        outline: none;
         flex-grow: 1;
       }
 

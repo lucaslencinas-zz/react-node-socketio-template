@@ -23,6 +23,10 @@ function addMessageToChat(message) {
   };
 }
 
+export function redirectHome() {
+  return (dispatch) => Promise.resolve(dispatch(push('/')));
+}
+
 export function enterToChat({ user }) {
   return (dispatch) => {
     const currentUser = { ...user, id: uuid.v4() };

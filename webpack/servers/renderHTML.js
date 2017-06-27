@@ -22,7 +22,7 @@ function buildHTML() {
           margin: 0;
           padding: 0;
           overflow: auto;
-          color: #191414;
+          color: #24292e;
           font-family: 'Open Sans', sans-serif;
         }
         * {

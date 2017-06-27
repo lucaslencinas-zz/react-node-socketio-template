@@ -39,25 +39,36 @@ class Chat extends React.Component {
           <div className={styles.members}>
             <div className={styles.list}>
               {members.map((member) => (
-                <div key={member.id}>{member.name}</div>
+                <div className={styles.member} key={member.id}>{member.name}</div>
               ))}
             </div>
           </div>
           <div className={styles.panel}>
             <div className={styles.messages}>
               {messages.map((msg) => (
-                <div key={msg.id}>{msg.user.name} says: {msg.text}</div>
+                <div className={`${styles.messageContainer} ${msg.user.id === user.id ? styles.myMessage : styles.othersMessage}`} key={msg.id}>
+                  <div className={styles.message}>
+                    <div className={styles.messageSender}>
+                      {msg.user.name}
+                    </div>
+                    <div className={styles.messageText}>
+                      {msg.text}
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
             <div className={styles.form}>
-              <input
-                placeholder={`Write your message here, ${user.name}`}
-                className={styles.inputMessage}
-                value={message}
-                onChange={this.handleMessageChange}
-                onKeyPress={this.handleKeyPress}
-              />
-              <button type="button" onClick={this.handleSend}>Send</button>
+              <div className={styles.inputContainer}>
+                <input
+                  placeholder={`Write your message here, ${user.name}`}
+                  className={styles.inputMessage}
+                  value={message}
+                  onChange={this.handleMessageChange}
+                  onKeyPress={this.handleKeyPress}
+                  autoFocus
+                />
+              </div>
             </div>
           </div>
         </div>

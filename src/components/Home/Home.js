@@ -43,6 +43,7 @@ class Home extends React.Component {
             value={name}
             onChange={this.handleNameChange}
             onKeyPress={this.handleKeyPress}
+            autoFocus
           />
           <button
             type="button"
