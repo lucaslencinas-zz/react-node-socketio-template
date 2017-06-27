@@ -4,10 +4,10 @@ describe('Chat Selectors', () => {
   let state;
 
   beforeEach(() => {
-    state = { username: 'lucas' };
+    state = { user: { name: 'lucas' } };
   });
 
-  it('the username retrieves the username string', () => {
-    selectors.username(state).should.eql('lucas');
+  it('the user retrieves the user string', () => {
+    selectors.user(state).should.eql({ name: 'lucas' });
   });
 });

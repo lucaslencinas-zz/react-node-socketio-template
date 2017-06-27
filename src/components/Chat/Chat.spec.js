@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import GameForm from './GameForm';
+import Chat from './Chat';
 
-describe('GameForm', () => {
+describe('Chat', () => {
   let gameForm;
   let game;
   let newGame;
@@ -28,7 +28,7 @@ describe('GameForm', () => {
         teamSizes: [1, 2, 4]
       };
       gameForm = shallow(
-        <GameForm
+        <Chat
           game={game}
           actionName={actionName}
           onSubmit={onSubmit}
@@ -92,7 +92,7 @@ describe('GameForm', () => {
     beforeEach(() => {
       actionName = 'Create';
       gameForm = shallow(
-        <GameForm
+        <Chat
           actionName={actionName}
           onSubmit={onSubmit}
           onCancel={onCancel}

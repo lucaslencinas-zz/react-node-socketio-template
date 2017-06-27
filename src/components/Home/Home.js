@@ -6,23 +6,30 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { username: '' };
+    this.state = { name: '' };
     this.handleEnterToChat = this.handleEnterToChat.bind(this);
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleEnterToChat() {
     this.props.onEnterToChat({
-      user: { username: this.state.username }
+      user: { name: this.state.name }
     });
   }
 
-  handleUsernameChange(e) {
-    this.setState({ username: e.target.value });
+  handleNameChange(e) {
+    this.setState({ name: e.target.value });
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleEnterToChat();
+    }
   }
 
   render() {
-    const { username } = this.state;
+    const { name } = this.state;
     const { homeTitle } = this.props;
     return (
       <div className={styles.home}>
@@ -31,10 +38,11 @@ class Home extends React.Component {
         </div>
         <div className={styles.form}>
           <input
-            placeholder="Username"
+            placeholder="Name"
             className={styles.inputName}
-            value={username}
-            onChange={this.handleUsernameChange}
+            value={name}
+            onChange={this.handleNameChange}
+            onKeyPress={this.handleKeyPress}
           />
           <button
             type="button"

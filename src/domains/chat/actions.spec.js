@@ -14,21 +14,21 @@ describe('Chat actions', () => {
 
   beforeEach(() => {
     initialState = {
-      username: '',
+      user: {},
       members: [],
       messages: []
     };
   });
 
-  describe('setUserName()', () => {
+  describe('setUser()', () => {
     beforeEach(() => {
       store = mockStore(initialState);
     });
 
     context('when the games are retrieved successfully', () => {
       beforeEach(() => {
-        expectedActions = [{ type: actionTypes.SET_USER_NAME, username: 'lucas' }];
-        return store.dispatch(actions.setUserName({ username: 'lucas' }));
+        expectedActions = [{ type: actionTypes.SET_USER, user: { name: 'lucas' } }];
+        return store.dispatch(actions.setUser({ user: { name: 'lucas' } }));
       });
 
       it('executes the expected actions', () => (

@@ -8,13 +8,14 @@ class Chat extends React.Component {
 
     this.handleSend = this.handleSend.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = { message: '' };
   }
 
   handleSend() {
-    const { username, onSendMessage } = this.props;
+    const { user, onSendMessage } = this.props;
 
-    onSendMessage({ username, message: this.state.message });
+    onSendMessage({ user, text: this.state.message });
     this.setState({ message: '' });
   }
 
@@ -22,8 +23,14 @@ class Chat extends React.Component {
     this.setState({ message: e.target.value });
   }
 
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSend();
+    }
+  }
+
   render() {
-    const { username, messages, members } = this.props;
+    const { user, messages, members } = this.props;
     const { message } = this.state;
     return (
       <div className={styles.chat}>
@@ -31,19 +38,24 @@ class Chat extends React.Component {
         <div className={styles.content}>
           <div className={styles.members}>
             <div className={styles.list}>
-              lista de miembros: {members}
+              {members.map((member) => (
+                <div key={member.id}>{member.name}</div>
+              ))}
             </div>
           </div>
           <div className={styles.panel}>
             <div className={styles.messages}>
-              lista de mensajes: {messages}
+              {messages.map((msg) => (
+                <div key={msg.id}>{msg.user.name} says: {msg.text}</div>
+              ))}
             </div>
             <div className={styles.form}>
               <input
-                placeholder={`Write your message here, ${username}`}
+                placeholder={`Write your message here, ${user.name}`}
                 className={styles.inputMessage}
                 value={message}
                 onChange={this.handleMessageChange}
+                onKeyPress={this.handleKeyPress}
               />
               <button type="button" onClick={this.handleSend}>Send</button>
             </div>
@@ -55,7 +67,7 @@ class Chat extends React.Component {
 }
 
 Chat.propTypes = {
-  username: PropTypes.string,
+  user: PropTypes.object,
   messages: PropTypes.arrayOf(PropTypes.object),
   members: PropTypes.arrayOf(PropTypes.object),
   onSendMessage: PropTypes.func

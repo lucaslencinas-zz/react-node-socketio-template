@@ -6,13 +6,13 @@ import {
 } from '~/domains';
 
 const chatState = (state) => ({
-  username: selectors.username(state),
+  user: selectors.user(state),
   members: selectors.members(state),
-  messsages: selectors.messages(state)
+  messages: selectors.messages(state)
 });
 
 const chatAction = (dispatch) => ({
-  onSendtMessage: (payload) => dispatch(actions.sendtMessage(payload))
+  onSendMessage: (payload) => dispatch(actions.sendMessage(payload))
 });
 
 export default connect(chatState, chatAction)(Chat);

@@ -34,11 +34,13 @@
           flex-grow: 1;
           padding: 20px;
           border: 2px solid grey;
+          overflow-y: scroll;
         }
 
         .form {
           display: flex;
           padding: 20px 0;
+          min-height: 70px;
 
           .input-message {
             flex: 1;
