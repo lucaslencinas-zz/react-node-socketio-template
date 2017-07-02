@@ -7,14 +7,14 @@ class Home extends React.Component {
     super(props);
 
     this.state = { name: '' };
-    this.handleEnterToChat = this.handleEnterToChat.bind(this);
+    this.handleEnter = this.handleEnter.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  handleEnterToChat() {
-    this.props.onEnterToChat({
-      user: { name: this.state.name }
+  handleEnter() {
+    this.props.onEnter({
+      user: { name: this.state.name.trim() }
     });
   }
 
@@ -23,8 +23,8 @@ class Home extends React.Component {
   }
 
   handleKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.handleEnterToChat();
+    if (e.key === 'Enter' && this.state.name.trim()) {
+      this.handleEnter();
     }
   }
 
@@ -48,7 +48,7 @@ class Home extends React.Component {
           <button
             type="button"
             className={styles.button}
-            onClick={this.handleEnterToChat}
+            onClick={this.handleEnter}
           >
             Enter
           </button>
@@ -60,7 +60,7 @@ class Home extends React.Component {
 
 Home.propTypes = {
   homeTitle: PropTypes.string,
-  onEnterToChat: PropTypes.func
+  onEnter: PropTypes.func
 };
 
 export default Home;

@@ -13,7 +13,10 @@ const chatState = (state) => ({
 });
 
 const chatAction = (dispatch) => ({
-  onSendMessage: (payload) => dispatch(actions.sendMessage(payload))
+  onAddMessage: (payload) => dispatch(actions.addMessage(payload)),
+  onRemoveMember: (payload) => dispatch(actions.removeMember(payload)),
+  onAddMember: (payload) => dispatch(actions.addMember(payload)),
+  onAddCurrentMembers: (payload) => dispatch(actions.addCurrentMembers(payload))
 });
 
 const resolve = ({ dispatch, getState }) => {

@@ -7,7 +7,7 @@ const homeState = () => ({
 });
 
 const homeAction = (dispatch) => ({
-  onEnterToChat: (payload) => dispatch(actions.enterToChat(payload))
+  onEnter: (payload) => dispatch(actions.enter(payload))
 });
 
 export default connect(homeState, homeAction)(Home);

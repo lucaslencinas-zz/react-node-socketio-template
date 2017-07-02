@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import io from 'socket.io-client';
+import uuid from 'uuid';
 import styles from './Chat.css';
 
 class Chat extends React.Component {
@@ -9,13 +11,27 @@ class Chat extends React.Component {
     this.handleSend = this.handleSend.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.state = { message: '' };
+    this.state = { message: '', connection: io() };
+    this.initializeSocketClient(this.state.connection);
+  }
+
+  initializeSocketClient(socket) {
+    const handshake = { user: this.props.user };
+
+    socket.emit('user-connected', handshake);
+    socket.on('user-connected', (member) => this.props.onAddMember(member));
+    socket.on('current-users', (members) => this.props.onAddCurrentMembers(members));
+    socket.on('new-message', (msg) => this.props.onAddMessage(msg));
+    socket.on('user-disconnected', (member) => this.props.onRemoveMember(member));
   }
 
   handleSend() {
-    const { user, onSendMessage } = this.props;
+    const { user, onAddMessage } = this.props;
+    const { message, connection } = this.state;
+    const newMessage = { user, text: message.trim(), id: uuid.v4() };
 
-    onSendMessage({ user, text: this.state.message });
+    connection.emit('new-message', newMessage);
+    onAddMessage(newMessage);
     this.setState({ message: '' });
   }
 
@@ -24,7 +40,7 @@ class Chat extends React.Component {
   }
 
   handleKeyPress(e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.message.trim()) {
       this.handleSend();
     }
   }
@@ -32,31 +48,19 @@ class Chat extends React.Component {
   render() {
     const { user, messages, members } = this.props;
     const { message } = this.state;
+
     return (
       <div className={styles.chat}>
-        <h3>Welcome to the Chat</h3>
+        <h3>Welcome to a random Chat with React, Redux and SocketIO</h3>
         <div className={styles.content}>
           <div className={styles.members}>
             <div className={styles.list}>
-              {members.map((member) => (
-                <div className={styles.member} key={member.id}>{member.name}</div>
-              ))}
+              {members.map((member) => <Member key={member.id} user={user} member={member} />)}
             </div>
           </div>
           <div className={styles.panel}>
             <div className={styles.messages}>
-              {messages.map((msg) => (
-                <div className={`${styles.messageContainer} ${msg.user.id === user.id ? styles.myMessage : styles.othersMessage}`} key={msg.id}>
-                  <div className={styles.message}>
-                    <div className={styles.messageSender}>
-                      {msg.user.name}
-                    </div>
-                    <div className={styles.messageText}>
-                      {msg.text}
-                    </div>
-                  </div>
-                </div>
-              ))}
+              {messages.map((msg) => <Message key={msg.id} msg={msg} user={user} />)}
             </div>
             <div className={styles.form}>
               <div className={styles.inputContainer}>
@@ -81,7 +85,50 @@ Chat.propTypes = {
   user: PropTypes.object,
   messages: PropTypes.arrayOf(PropTypes.object),
   members: PropTypes.arrayOf(PropTypes.object),
-  onSendMessage: PropTypes.func
+  onAddMessage: PropTypes.func,
+  onRemoveMember: PropTypes.func,
+  onAddMember: PropTypes.func,
+  onAddCurrentMembers: PropTypes.func
+};
+
+const Member = ({ user, member }) => (
+  <div className={`${styles.member} ${member.id === user.id ? styles.currentUser : ''}`}>
+    {member.name}
+  </div>
+);
+
+Member.propTypes = {
+  user: PropTypes.object,
+  member: PropTypes.object
+};
+
+const Message = ({ msg, user }) => {
+  const isServerMessage = msg.user.id === 'server';
+  let messageClass;
+
+  if (isServerMessage) {
+    messageClass = 'serverMessage';
+  } else {
+    messageClass = msg.user.id === user.id ? 'myMessage' : 'othersMessage';
+  }
+
+  return (
+    <div className={`${styles.messageContainer} ${styles[messageClass]}`}>
+      <div className={styles.message}>
+        <div display-if={!isServerMessage} className={styles.messageSender}>
+          {msg.user.name}
+        </div>
+        <div className={styles.messageText}>
+          {msg.text}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+Message.propTypes = {
+  msg: PropTypes.object,
+  user: PropTypes.object
 };
 
 export default Chat;

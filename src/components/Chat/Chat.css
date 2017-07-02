@@ -26,6 +26,12 @@
           .member {
             padding: 5px;
           }
+
+          .current-user {
+            color: #5cac5c;
+            font-weight: bold;
+            font-style: italic;
+          }
         }
       }
 
@@ -62,14 +68,20 @@
                 font-weight: bold;
                 font-style: italic;
               }
-
-              .messageText {
-              }
             }
           }
 
           .others-message {
             justify-content: flex-start;
+          }
+
+          .server-message {
+            justify-content: center;
+
+            .message {
+              background-color: #deeef6;
+              padding: 5px 10px;
+            }
           }
 
           .my-message {
