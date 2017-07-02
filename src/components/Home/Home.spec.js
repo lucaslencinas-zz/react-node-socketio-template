@@ -4,24 +4,21 @@ import Home from './Home';
 
 describe('Home', () => {
   let home;
-  let onEditGame;
+  let homeTitle;
+  let onEnter;
 
   beforeEach(() => {
-    onEditGame = sandbox.spy();
+    homeTitle = 'A title';
+    onEnter = sandbox.stub();
+
+    home = shallow(
+      <Home
+        homeTitle={homeTitle}
+        onEnter={onEnter}
+      />);
   });
 
-  context('when the user is not editing or creating a game', () => {
-    beforeEach(() => {
-      home = shallow(
-        <Home
-          homeTitle={'hola'}
-          onEditGame={onEditGame}
-        />
-      );
-    });
-
-    it('renders the title', () => {
-      home.find('h1').text().should.eql('React Node Template');
-    });
+  it('renders the Home', () => {
+    home.exists().should.eql(true);
   });
 });

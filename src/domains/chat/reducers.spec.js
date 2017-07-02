@@ -1,13 +1,17 @@
 import reducers from './reducers';
 
-describe('Games reducers', () => {
+describe('Chat reducers', () => {
   let state;
   let action;
   let result;
 
   context('when the state is empty', () => {
     beforeEach(() => {
-      state = { allGames: [] };
+      state = {
+        user: {},
+        members: [],
+        messages: []
+      };
     });
 
     context('and no action is triggered', () => {

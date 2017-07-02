@@ -1,155 +1,47 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { expect } from 'chai';
+import * as socketio from '~/utils/socket.io';
 import Chat from './Chat';
 
 describe('Chat', () => {
-  let gameForm;
-  let game;
-  let newGame;
-  let actionName;
-  let onSubmit;
-  let onCancel;
+  let chat;
+  let user;
+  let messages;
+  let members;
+  let onAddMessage;
+  let onRemoveMember;
+  let onAddMember;
+  let onAddCurrentMembers;
+  let connectionStub;
 
   beforeEach(() => {
-    onSubmit = sandbox.spy();
-    onCancel = sandbox.spy();
+    user = { id: '123', name: 'lucas' };
+    messages = [];
+    members = [{ id: '123', name: 'lucas' }];
+    onAddMessage = sandbox.stub();
+    onRemoveMember = sandbox.stub();
+    onAddMember = sandbox.stub();
+    onAddCurrentMembers = sandbox.stub();
+
+    connectionStub = {
+      on: sandbox.stub(),
+      emit: sandbox.stub()
+    };
+    sandbox.stub(socketio, 'createConnection').returns(connectionStub);
+
+    chat = shallow(
+      <Chat
+        user={user}
+        messages={messages}
+        members={members}
+        onAddMessage={onAddMessage}
+        onRemoveMember={onRemoveMember}
+        onAddMember={onAddMember}
+        onAddCurrentMembers={onAddCurrentMembers}
+      />);
   });
 
-  context('when editing', () => {
-    beforeEach(() => {
-      actionName = 'Edit';
-      game = {
-        name: 'otherGame',
-        slug: 'othergame',
-        description: 'other description',
-        link: 'otherGame.html',
-        types: ['multiPlayer'],
-        teamSizes: [1, 2, 4]
-      };
-      gameForm = shallow(
-        <Chat
-          game={game}
-          actionName={actionName}
-          onSubmit={onSubmit}
-          onCancel={onCancel}
-        />);
-    });
-
-    it('renders the title', () => {
-      gameForm.find('h3').text().should.eql('Edit Game');
-    });
-
-    it('set the state with the game', () => {
-      gameForm.state().should.eql(game);
-    });
-
-    it('renders all the input with the correct values', () => {
-      gameForm.find('input').at(0).prop('value').should.eql(game.name);
-      gameForm.find('input').at(1).prop('value').should.eql(game.description);
-      gameForm.find('input').at(2).prop('value').should.eql(game.link);
-      gameForm.find('input').at(3).prop('value').should.eql(game.teamSizes);
-      gameForm.find('input').at(4).prop('value').should.eql(game.types);
-    });
-
-    it('renders all the buttons with the correct texts', () => {
-      gameForm.find('button').at(0).text().should.eql('Cancel');
-      gameForm.find('button').at(1).text().should.eql('Edit');
-    });
-
-    context('when having edited the fields', () => {
-      beforeEach(() => {
-        newGame = {
-          name: 'newGame',
-          slug: 'newgame',
-          description: 'new description',
-          link: 'newGame.html',
-          types: ['multiPlayer'],
-          teamSizes: [1, 2, 4]
-        };
-        gameForm.find('input').at(0).prop('onChange')({ target: { value: newGame.name } });
-        gameForm.find('input').at(1).prop('onChange')({ target: { value: newGame.description } });
-        gameForm.find('input').at(2).prop('onChange')({ target: { value: newGame.link } });
-      });
-
-      context('when clicking on the Edit Button', () => {
-        beforeEach(() => {
-          gameForm.find('button').at(1).simulate('click');
-        });
-
-        it('calls the onSubmit prop function with the correct param', () => {
-          const params = {
-            previousGame: { ...game, slug: 'othergame' },
-            game: { ...newGame }
-          };
-          onSubmit.should.have.been.calledWith(params);
-        });
-      });
-    });
-  });
-
-  context('when creating', () => {
-    beforeEach(() => {
-      actionName = 'Create';
-      gameForm = shallow(
-        <Chat
-          actionName={actionName}
-          onSubmit={onSubmit}
-          onCancel={onCancel}
-        />);
-    });
-
-    it('renders the title', () => {
-      gameForm.find('h3').text().should.eql('Create Game');
-    });
-
-    it('set the state with the game', () => {
-      gameForm.state().should.eql({});
-    });
-
-    it('renders all the input with the correct values', () => {
-      expect(gameForm.find('input').at(0).prop('value')).to.eql(undefined);
-      expect(gameForm.find('input').at(1).prop('value')).to.eql(undefined);
-      expect(gameForm.find('input').at(2).prop('value')).to.eql(undefined);
-      expect(gameForm.find('input').at(3).prop('value')).to.eql(undefined);
-      expect(gameForm.find('input').at(4).prop('value')).to.eql(undefined);
-    });
-
-    it('renders all the buttons with the correct texts', () => {
-      gameForm.find('button').at(0).text().should.eql('Cancel');
-      gameForm.find('button').at(1).text().should.eql('Create');
-    });
-
-    context('when having edited the fields', () => {
-      beforeEach(() => {
-        newGame = {
-          name: 'newGame',
-          slug: 'newgame',
-          description: 'new description',
-          link: 'newGame.html',
-          types: ['multiPlayer'],
-          teamSizes: [1, 2, 4]
-        };
-        gameForm.find('input').at(0).prop('onChange')({ target: { value: newGame.name } });
-        gameForm.find('input').at(1).prop('onChange')({ target: { value: newGame.description } });
-        gameForm.find('input').at(2).prop('onChange')({ target: { value: newGame.link } });
-        gameForm.find('input').at(3).prop('onChange')({ target: { value: newGame.teamSizes } });
-        gameForm.find('input').at(4).prop('onChange')({ target: { value: newGame.types } });
-      });
-
-      context('when clicking on the Create Button', () => {
-        beforeEach(() => {
-          gameForm.find('button').at(1).simulate('click');
-        });
-
-        it('calls the onSubmit prop function with the correct param', () => {
-          const params = {
-            previousGame: { slug: '' },
-            game: { ...newGame }
-          };
-          onSubmit.should.have.been.calledWith(params);
-        });
-      });
-    });
+  it('renders the Chat', () => {
+    chat.exists().should.eql(true);
   });
 });

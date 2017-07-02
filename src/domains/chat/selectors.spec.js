@@ -4,7 +4,11 @@ describe('Chat Selectors', () => {
   let state;
 
   beforeEach(() => {
-    state = { user: { name: 'lucas' } };
+    state = {
+      chat: {
+        user: { name: 'lucas' }
+      }
+    };
   });
 
   it('the user retrieves the user string', () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import io from 'socket.io-client';
+import * as socketio from '~/utils/socket.io';
 import uuid from 'uuid';
 import styles from './Chat.css';
 
@@ -11,18 +11,18 @@ class Chat extends React.Component {
     this.handleSend = this.handleSend.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.state = { message: '', connection: io() };
+    this.state = { message: '', connection: socketio.createConnection() };
     this.initializeSocketClient(this.state.connection);
   }
 
-  initializeSocketClient(socket) {
+  initializeSocketClient(connection) {
     const handshake = { user: this.props.user };
 
-    socket.emit('user-connected', handshake);
-    socket.on('user-connected', (member) => this.props.onAddMember(member));
-    socket.on('current-users', (members) => this.props.onAddCurrentMembers(members));
-    socket.on('new-message', (msg) => this.props.onAddMessage(msg));
-    socket.on('user-disconnected', (member) => this.props.onRemoveMember(member));
+    connection.emit('user-connected', handshake);
+    connection.on('user-connected', (member) => this.props.onAddMember(member));
+    connection.on('current-users', (members) => this.props.onAddCurrentMembers(members));
+    connection.on('new-message', (msg) => this.props.onAddMessage(msg));
+    connection.on('user-disconnected', (member) => this.props.onRemoveMember(member));
   }
 
   handleSend() {

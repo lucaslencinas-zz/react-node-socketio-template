@@ -20,15 +20,20 @@ describe('Chat actions', () => {
     };
   });
 
-  describe('setUser()', () => {
+  describe('addMessage()', () => {
     beforeEach(() => {
       store = mockStore(initialState);
     });
 
-    context('when the games are retrieved successfully', () => {
+    context('When the message was added successfully', () => {
+      let message;
+      let user;
+
       beforeEach(() => {
-        expectedActions = [{ type: actionTypes.SET_USER, user: { name: 'lucas' } }];
-        return store.dispatch(actions.setUser({ user: { name: 'lucas' } }));
+        user = { id: '456', name: 'lucas' };
+        message = { id: '123', text: 'hola', user };
+        expectedActions = [{ type: actionTypes.ADD_MESSAGE, message }];
+        return store.dispatch(actions.addMessage(message));
       });
 
       it('executes the expected actions', () => (
