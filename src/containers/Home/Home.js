@@ -3,7 +3,7 @@ import { Home } from '~/components';
 import { actions } from '~/domains';
 
 const homeState = () => ({
-  homeTitle: 'Type your name and enter the chat'
+  homeTitle: 'Enter your name to access the Chat'
 });
 
 const homeAction = (dispatch) => ({
