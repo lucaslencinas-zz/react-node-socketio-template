@@ -1,4 +1,3 @@
-export { default as GamesList } from './GamesList';
-export { default as GameDescription } from './GameDescription';
-export { default as GameForm } from './GameForm';
+export { default as Layout } from './Layout';
 export { default as Home } from './Home';
+export { default as Chat } from './Chat';

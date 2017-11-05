@@ -2,11 +2,11 @@ import { combineReducers } from 'redux';
 import { reducer as reduxAsyncReducer } from 'redux-connect';
 
 import {
-  actions as gamesActions,
-  actionTypes as gamesActionTypes,
-  selectors as gamesSelectors,
-  reducers as gamesReducers
-} from './games';
+  actions as chatActions,
+  actionTypes as chatActionTypes,
+  selectors as chatSelectors,
+  reducers as chatReducers
+} from './chat';
 
 import {
   actions as uiActions,
@@ -16,22 +16,22 @@ import {
 } from './ui';
 
 const actions = {
-  ...gamesActions,
+  ...chatActions,
   ...uiActions
 };
 
 const actionTypes = {
-  ...gamesActionTypes,
+  ...chatActionTypes,
   ...uiActionTypes
 };
 
 const selectors = {
-  ...gamesSelectors,
+  ...chatSelectors,
   ...uiSelectors
 };
 
 const reducers = combineReducers({
-  games: gamesReducers,
+  chat: chatReducers,
   ui: uiReducers,
   reduxAsyncConnect: reduxAsyncReducer
 });

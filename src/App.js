@@ -1,12 +1,12 @@
 import 'babel-polyfill';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { ReduxAsyncConnect } from 'redux-connect';
 import RouterContext from 'react-router/lib/RouterContext';
-import { Home } from '~/containers';
 import { configureStore } from './store';
+import routes from './routes';
 
 /* eslint-disable react/prop-types */
 const asyncRender = (props) => (<RouterContext {...props} />);
@@ -18,7 +18,7 @@ const App = ({ initialState = {} }) => {
   return (
     <Provider store={store} key="provider" ref={(rootInstance) => initHotLoader(rootInstance)}>
       <Router history={browserHistory} render={render} >
-        <Route path="/*" component={Home} />
+        {routes}
       </Router>
     </Provider>
   );

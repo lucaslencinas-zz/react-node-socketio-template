@@ -1,4 +1,6 @@
 import { applyMiddleware, createStore } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
+import browserHistory from 'react-router/lib/browserHistory';
 import { dispatchError } from '~/utils/errors';
 import { reducers } from '~/domains';
 
@@ -17,7 +19,7 @@ export const thunk = ({ dispatch, getState }) => (next) => (action) => {
 };
 
 export default function configureStore(initialState) {
-  const middlewares = [thunk];
+  const middlewares = [thunk, routerMiddleware(browserHistory)];
   const middleware = applyMiddleware(...middlewares);
   const enhancers = getEnhancers(middleware);
   const store = createStore(reducers, initialState, enhancers);
